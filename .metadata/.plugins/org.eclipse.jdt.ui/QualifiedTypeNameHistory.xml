@@ -17,4 +17,5 @@
     <fullyQualifiedTypeName name="org.springframework.web.servlet.mvc.Controller"/>
     <fullyQualifiedTypeName name="java.util.HashMap"/>
     <fullyQualifiedTypeName name="java.util.Map"/>
+    <fullyQualifiedTypeName name="lombok.ToString"/>
 </qualifiedTypeNameHistroy>
