@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <aop-reference-model>
+<aop-project name="pro27_p"/>
 <aop-project name="test02"/>
 <aop-project name="test03"/>
 <aop-project name="ex00"/>
