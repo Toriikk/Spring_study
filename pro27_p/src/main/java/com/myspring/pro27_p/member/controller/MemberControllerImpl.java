@@ -32,6 +32,15 @@ public class MemberControllerImpl   implements MemberController {
 	@Autowired
 	MemberVO memberVO ;
 	
+	@RequestMapping(value = { "/","/main.do"}, method = RequestMethod.GET)
+	private ModelAndView main(HttpServletRequest request, HttpServletResponse response) {
+		String viewName = "/member/listMembers";
+		List membersList = memberService.listMembers();
+		ModelAndView mav = new ModelAndView(viewName);
+		mav.addObject("membersList", membersList);
+		return mav;
+	}
+	
 	@Override
 	@RequestMapping(value="/member/listMembers.do" ,method = RequestMethod.GET)
 	public ModelAndView listMembers(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -140,14 +149,17 @@ public class MemberControllerImpl   implements MemberController {
 		} else {
 			end = uri.length();
 		}
-
+		
+		
 		String viewName = uri.substring(begin, end);
 		if (viewName.indexOf(".") != -1) {
 			viewName = viewName.substring(0, viewName.lastIndexOf("."));
 		}
 		if (viewName.lastIndexOf("/") != -1) {
 			viewName = viewName.substring(viewName.lastIndexOf("/", 1), viewName.length());
+
 		}
+		
 		return viewName;
 	}
 
