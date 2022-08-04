@@ -18,7 +18,7 @@ import com.myspring.pro30.board.vo.ImageVO;
 @Transactional(propagation = Propagation.REQUIRED)
 public class BoardServiceImpl  implements BoardService{
 	@Autowired
-	BoardDAO boardDAO;
+	private BoardDAO boardDAO;
 	
 	public List<ArticleVO> listArticles() throws Exception{
 		List<ArticleVO> articlesList =  boardDAO.selectAllArticlesList();
@@ -73,7 +73,5 @@ public class BoardServiceImpl  implements BoardService{
 	public void removeArticle(int articleNO) throws Exception {
 		boardDAO.deleteArticle(articleNO);
 	}
-	
-
 	
 }

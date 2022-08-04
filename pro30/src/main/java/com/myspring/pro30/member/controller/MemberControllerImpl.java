@@ -24,11 +24,11 @@ import com.myspring.pro30.member.vo.MemberVO;
 
 @Controller("memberController")
 //@EnableAspectJAutoProxy
-public class MemberControllerImpl implements MemberController {
+public class MemberControllerImpl   implements MemberController {
 	@Autowired
 	private MemberService memberService;
 	@Autowired
-	MemberVO memberVO ;
+	private MemberVO memberVO ;
 	
 	@RequestMapping(value = { "/","/main.do"}, method = RequestMethod.GET)
 	private ModelAndView main(HttpServletRequest request, HttpServletResponse response) {
@@ -41,6 +41,8 @@ public class MemberControllerImpl implements MemberController {
 	@Override
 	@RequestMapping(value="/member/listMembers.do" ,method = RequestMethod.GET)
 	public ModelAndView listMembers(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		request.setCharacterEncoding("utf-8");
+		response.setContentType("html/text;charset=utf-8");
 		String viewName = (String)request.getAttribute("viewName");
 		List membersList = memberService.listMembers();
 		ModelAndView mav = new ModelAndView(viewName);
@@ -53,6 +55,7 @@ public class MemberControllerImpl implements MemberController {
 	public ModelAndView addMember(@ModelAttribute("member") MemberVO member,
 			                  HttpServletRequest request, HttpServletResponse response) throws Exception {
 		request.setCharacterEncoding("utf-8");
+		response.setContentType("html/text;charset=utf-8");
 		int result = 0;
 		result = memberService.addMember(member);
 		ModelAndView mav = new ModelAndView("redirect:/member/listMembers.do");
@@ -132,36 +135,36 @@ public class MemberControllerImpl implements MemberController {
 	}
 	
 
-//	private String getViewName(HttpServletRequest request) throws Exception {
-//		String contextPath = request.getContextPath();
-//		String uri = (String) request.getAttribute("javax.servlet.include.request_uri");
-//		if (uri == null || uri.trim().equals("")) {
-//			uri = request.getRequestURI();
-//		}
-//
-//		int begin = 0;
-//		if (!((contextPath == null) || ("".equals(contextPath)))) {
-//			begin = contextPath.length();
-//		}
-//
-//		int end;
-//		if (uri.indexOf(";") != -1) {
-//			end = uri.indexOf(";");
-//		} else if (uri.indexOf("?") != -1) {
-//			end = uri.indexOf("?");
-//		} else {
-//			end = uri.length();
-//		}
-//
-//		String viewName = uri.substring(begin, end);
-//		if (viewName.indexOf(".") != -1) {
-//			viewName = viewName.substring(0, viewName.lastIndexOf("."));
-//		}
-//		if (viewName.lastIndexOf("/") != -1) {
-//			viewName = viewName.substring(viewName.lastIndexOf("/", 1), viewName.length());
-//		}
-//		return viewName;
-//	}
+	private String getViewName(HttpServletRequest request) throws Exception {
+		String contextPath = request.getContextPath();
+		String uri = (String) request.getAttribute("javax.servlet.include.request_uri");
+		if (uri == null || uri.trim().equals("")) {
+			uri = request.getRequestURI();
+		}
+
+		int begin = 0;
+		if (!((contextPath == null) || ("".equals(contextPath)))) {
+			begin = contextPath.length();
+		}
+
+		int end;
+		if (uri.indexOf(";") != -1) {
+			end = uri.indexOf(";");
+		} else if (uri.indexOf("?") != -1) {
+			end = uri.indexOf("?");
+		} else {
+			end = uri.length();
+		}
+
+		String viewName = uri.substring(begin, end);
+		if (viewName.indexOf(".") != -1) {
+			viewName = viewName.substring(0, viewName.lastIndexOf("."));
+		}
+		if (viewName.lastIndexOf("/") != -1) {
+			viewName = viewName.substring(viewName.lastIndexOf("/", 1), viewName.length());
+		}
+		return viewName;
+	}
 
 
 }

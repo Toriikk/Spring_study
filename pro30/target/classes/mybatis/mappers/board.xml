@@ -13,13 +13,13 @@
     <result property="writeDate" column="writeDate" />
     <result property="imageFileName" column="imageFileName" />
   </resultMap> 
-<!--   
+  
   <resultMap id="imgResult" type="imageVO">
 	  <result property="imageFileNO" column="imageFileNO" />
 	  <result property="articleNO" column="articleNO" />
 	  <result property="imageFileName" column="imageFileName" />
  </resultMap>
- -->
+
   <select id="selectAllArticlesList" resultMap="articlesResult"   >
     <![CDATA[
       SELECT level, articleNO, parentNO, title, content, writeDate, imageFileName, id
@@ -90,7 +90,7 @@
     </foreach>
   </insert>
  -->
-<!--   
+ 
   <select id="selectNewImageFileNO" resultType="int"  >
     <![CDATA[
       SELECT  nvl(max(imageFileNO),0) from t_imageFile		
@@ -104,5 +104,5 @@
       where articleNO=#{articleNO}	
     ]]>
   </select> 
-  -->
+  
 </mapper>

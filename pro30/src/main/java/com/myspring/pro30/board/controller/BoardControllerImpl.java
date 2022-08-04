@@ -37,9 +37,9 @@ import com.myspring.pro30.member.vo.MemberVO;
 public class BoardControllerImpl  implements BoardController{
 	private static final String ARTICLE_IMAGE_REPO = "C:\\board\\article_image";
 	@Autowired
-	BoardService boardService;
+	private BoardService boardService;
 	@Autowired
-	ArticleVO articleVO;
+	private ArticleVO articleVO;
 	
 	@Override
 	@RequestMapping(value= "/board/listArticles.do", method = {RequestMethod.GET, RequestMethod.POST})
@@ -83,7 +83,7 @@ public class BoardControllerImpl  implements BoardController{
 			int articleNO = boardService.addNewArticle(articleMap);
 			if(imageFileName!=null && imageFileName.length()!=0) {
 				File srcFile = new 
-				File(ARTICLE_IMAGE_REPO+"\\"+"temp"+"\\"+imageFileName);
+				File(ARTICLE_IMAGE_REPO+ "\\" + "temp"+ "\\" + imageFileName);
 				File destDir = new File(ARTICLE_IMAGE_REPO+"\\"+articleNO);
 				FileUtils.moveFileToDirectory(srcFile, destDir,true);
 			}
@@ -151,10 +151,6 @@ public class BoardControllerImpl  implements BoardController{
 	}
 	
 	String imageFileName= upload(multipartRequest);
-	HttpSession session = multipartRequest.getSession();
-	MemberVO memberVO = (MemberVO) session.getAttribute("member");
-	String id = memberVO.getId();
-	articleMap.put("id", id);
 	articleMap.put("imageFileName", imageFileName);
 	
 	String articleNO=(String)articleMap.get("articleNO");
@@ -244,7 +240,7 @@ public class BoardControllerImpl  implements BoardController{
 	MemberVO memberVO = (MemberVO) session.getAttribute("member");
 	String id = memberVO.getId();
 	articleMap.put("id",id);
-	
+	articleMap.put("parentNO", 0);
 	
 	List<String> fileList =upload(multipartRequest);
 	List<ImageVO> imageFileList = new ArrayList<ImageVO>();
@@ -320,15 +316,14 @@ public class BoardControllerImpl  implements BoardController{
 			String fileName = fileNames.next();
 			MultipartFile mFile = multipartRequest.getFile(fileName);
 			imageFileName=mFile.getOriginalFilename();
-			File file = new File(ARTICLE_IMAGE_REPO +"\\"+ fileName);
+			File file = new File(ARTICLE_IMAGE_REPO +"\\"+"temp"+"\\" + fileName);
 			if(mFile.getSize()!=0){ //File Null Check
-				if(! file.exists()){ //경로상에 파일이 존재하지 않을 경우
-					if(file.getParentFile().mkdirs()){ //경로에 해당하는 디렉토리들을 생성
-							file.createNewFile(); //이후 파일 생성
-					}
+				if(!file.exists()){ //경로상에 파일이 존재하지 않을 경우
+					file.getParentFile().mkdirs();  //경로에 해당하는 디렉토리들을 생성
+					mFile.transferTo(new File(ARTICLE_IMAGE_REPO +"\\"+"temp"+ "\\"+imageFileName)); //임시로 저장된 multipartFile을 실제 파일로 전송
 				}
-				mFile.transferTo(new File(ARTICLE_IMAGE_REPO +"\\"+"temp"+ "\\"+imageFileName)); //임시로 저장된 multipartFile을 실제 파일로 전송
 			}
+			
 		}
 		return imageFileName;
 	}
@@ -343,14 +338,12 @@ public class BoardControllerImpl  implements BoardController{
 			MultipartFile mFile = multipartRequest.getFile(fileName);
 			String originalFileName=mFile.getOriginalFilename();
 			fileList.add(originalFileName);
-			File file = new File(ARTICLE_IMAGE_REPO +"\\"+ fileName);
+			File file = new File(ARTICLE_IMAGE_REPO +"\\"+"temp"+"\\" + fileName);
 			if(mFile.getSize()!=0){ //File Null Check
-				if(! file.exists()){ //경로상에 파일이 존재하지 않을 경우
-					if(file.getParentFile().mkdirs()){ //경로에 해당하는 디렉토리들을 생성
-							file.createNewFile(); //이후 파일 생성
-					}
+				if(!file.exists()){ //경로상에 파일이 존재하지 않을 경우
+					file.getParentFile().mkdirs();  //경로에 해당하는 디렉토리들을 생성
+					mFile.transferTo(new File(ARTICLE_IMAGE_REPO +"\\"+"temp"+ "\\"+originalFileName)); //임시로 저장된 multipartFile을 실제 파일로 전송
 				}
-				mFile.transferTo(new File(ARTICLE_IMAGE_REPO +"\\"+"temp"+ "\\"+originalFileName)); //임시로 저장된 multipartFile을 실제 파일로 전송
 			}
 		}
 		return fileList;
